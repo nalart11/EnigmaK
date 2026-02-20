@@ -1,0 +1,33 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    java
+    id("com.gradleup.shadow") version "8.3.3"
+}
+
+group = "org.makeacake"
+version = "1.0-SNAPSHOT"
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
+
+    apply(plugin = "java")
+}
+
+subprojects {
+    apply(plugin = "com.gradleup.shadow")
+    apply(plugin = "application")
+
+    tasks.build {
+        dependsOn(tasks.withType<ShadowJar>())
+    }
+
+    dependencies {
+        implementation("org.json:json:20240303")
+    }
+}
+
+tasks.jar { isEnabled = false }
